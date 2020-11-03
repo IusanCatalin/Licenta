@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/imageView"/>
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnEmotion"
+        android:text="Process"
+        android:layout_below="@+id/imageView"
+        android:onClick="getEmotion"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/result"
+        android:text="Rezultat"
+        android:layout_below="@id/btnEmotion"/>
+
+    <Button
+        android:id="@+id/take_photo"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/result"
+        android:text="Take photo"
+        android:onClick="onClickTakePicture"
+        />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/result"
+        android:layout_toRightOf="@id/take_photo"
+        android:text="Speak"
+        android:onClick="recordSpeechActivity"
+        android:id="@+id/record"
+        />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnText"
+        android:text="Write text"
+        android:layout_below="@+id/result"
+        android:onClick="writeTextActivity"
+        android:layout_toRightOf="@id/record"
+        />
+
+</RelativeLayout>
