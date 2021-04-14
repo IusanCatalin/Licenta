@@ -506,11 +506,11 @@ public class MainActivity extends AppCompatActivity {
         popupView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(memory_case==1) {
+                if(mp.isPlaying()) {
                     mp.pause();
                     mp.stop();
                     mp.reset();
-
+                    Log.w("OPRIRE", "OPRIRE DIN TAP");
                 }
                 popupWindow.dismiss();
                 return true;
@@ -609,6 +609,7 @@ public class MainActivity extends AppCompatActivity {
                         mp.pause();
                         mp.stop();
                         mp.reset();
+                        Log.w("OPRIRE", "OPRIRE RESET");
                     }
                     try {
                         mp.setDataSource(path + File.separator + popup_file_name_view.getText());
