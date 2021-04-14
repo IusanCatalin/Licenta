@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.lang.ref.WeakReference;
 
 public class FrontCamera extends AppCompatActivity {
+
+    protected androidx.appcompat.widget.Toolbar toolbar;
     private Camera mCamera = null;
     private CameraPreview mPreview;
     Button captureButton;
@@ -54,6 +57,8 @@ public class FrontCamera extends AppCompatActivity {
                 mCamera.takePicture(null, null, mPicture);
             }
         });
+        setupUIViews();
+        initToolbar();
     }
 
     @SuppressWarnings("deprecation")
@@ -191,4 +196,25 @@ public class FrontCamera extends AppCompatActivity {
         return dst;
     }
 
+    public void setupUIViews()
+    {
+        toolbar = findViewById(R.id.history_toolbar);
+    }
+
+    private void initToolbar(){
+        //setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Take Picture");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home : {
+                onBackPressed();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -3,23 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.emotiontracker">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+
+    <library tools:node="removeAll" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ImageMemories"></activity>
+        <activity android:name=".AudioMemories" />
+        <activity android:name=".TextMemories" />
+        <activity android:name=".MemoriesActivity" />
+        <activity android:name=".GraphActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,19 +38,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FrontCamera"
-            >
-        </activity>
+        <activity android:name=".FrontCamera" />
+        <activity android:name=".RecordActivity" />
+        <activity android:name=".TextActivity" />
+        <activity android:name=".HistoryActivity" />
 
-        <activity android:name=".RecordActivity"/>
-        <activity android:name=".TextActivity"/>
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
-
-
-
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
-
-    <library tools:node="removeAll" />
 </manifest>

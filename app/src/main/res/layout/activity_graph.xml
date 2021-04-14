@@ -4,28 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FrontCamera">
+    tools:context=".HistoryActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/history_toolbar"
         >
-
     </androidx.appcompat.widget.Toolbar>
-    <FrameLayout
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/bar_chart"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/camera_preview"
+        android:layout_height="match_parent"
         />
-
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/camera_preview"
-        android:id="@+id/capture"
-        android:text="Take Photo"
-        />
-
 
 </RelativeLayout>

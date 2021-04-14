@@ -6,11 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".TextActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/history_toolbar"
+        >
 
+    </androidx.appcompat.widget.Toolbar>
     <Button
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="Analyse"
+        android:text="Finished"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/analyse_button"
@@ -31,14 +37,6 @@
         android:id="@+id/text"
         android:text="Write something about your day"
         android:textSize="25dp"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/result"
-        android:textSize="20dp"
-        android:layout_below="@id/analyse_button"
         />
 
 </RelativeLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HistoryActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/history_toolbar"
+        >
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:id="@+id/items_list"
+        android:layout_below="@+id/spinner"
+        >
+    </ListView>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/history_toolbar"/>
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="Custom date:"
+        android:layout_below="@id/history_toolbar"
+        android:layout_toRightOf="@id/spinner"
+        android:textSize="14dp"
+        android:id="@+id/text_customdate"
+        />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="15/9/2020 -"
+        android:layout_below="@id/history_toolbar"
+        android:layout_toRightOf="@id/text_customdate"
+        android:textSize="17dp"
+        android:id="@+id/date1"
+        android:onClick="onClickDate1"
+        />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="15/9/2020"
+        android:layout_below="@id/history_toolbar"
+        android:layout_toRightOf="@id/date1"
+        android:textSize="17dp"
+        android:id="@+id/date2"
+        android:onClick="onClickDate2"
+        />
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/history_toolbar"
+        android:layout_toRightOf="@+id/date2"
+        android:text="OK"
+        android:textSize="10dp"
+        android:onClick="onClickOkDate"
+        />
+    
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Graphs"
+        android:layout_below="@id/items_list"
+        android:onClick="start_graph_activity"
+        />
+
+
+</RelativeLayout>

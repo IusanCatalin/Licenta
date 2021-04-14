@@ -131,7 +131,10 @@ class GetEmotionCall extends AsyncTask<InputStream, String, Face[]> {
         float[] top = {anger, contempt, disgust, fear, happiness, neutral, sadness, surprise};
         Arrays.sort(top);
         if (top[top.length - 1] == 0) {
-            top3[0] = "No results found, image unclear or low quality";
+            {
+                Log.w("No result", "image unclear");
+                top3[0] = "No results found, image unclear or low quality";
+            }
         } else {
             //first
             if (anger == top[top.length - 1]) {

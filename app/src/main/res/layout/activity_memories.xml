@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecordActivity">
-
+    tools:context=".MemoriesActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -14,34 +13,34 @@
         >
 
     </androidx.appcompat.widget.Toolbar>
+
     <Button
         android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Record"
-        android:layout_centerVertical="true"
+        android:layout_height="100dp"
+        android:layout_below="@id/history_toolbar"
         android:layout_centerHorizontal="true"
-        android:id="@+id/record_button"
-        android:onClick="startRecording"
-        />
-    <TextView
-        android:layout_width="400dp"
-        android:layout_height="50dp"
-        android:text="Hello, how is your day going?"
-        android:textSize="30dp"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/record_button"
+        android:text="Images"
+        android:id="@+id/btn_images"
+        android:onClick="image_memories"
         />
 
     <Button
         android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Stop"
-        android:layout_centerVertical="true"
+        android:layout_height="100dp"
+        android:layout_below="@id/btn_images"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_button"
-        android:onClick="stopRecording"
-        android:id="@+id/stop_button"
+        android:text="Audio"
+        android:id="@+id/btn_audio"
+        android:onClick="audio_memories"
         />
 
-
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/btn_audio"
+        android:layout_centerHorizontal="true"
+        android:text="Journals"
+        android:id="@+id/btn_texts"
+        android:onClick="text_memories"
+        />
 </RelativeLayout>

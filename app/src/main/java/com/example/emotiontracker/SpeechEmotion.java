@@ -1,12 +1,19 @@
 package com.example.emotiontracker;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.projects.alshell.vokaturi.EmotionProbabilities;
 import com.projects.alshell.vokaturi.Vokaturi;
 import com.projects.alshell.vokaturi.VokaturiException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 
 public class SpeechEmotion {
@@ -19,6 +26,7 @@ public class SpeechEmotion {
     private double sadness;
     private double anger;
     private double fear;
+    private File file;
 
     SpeechEmotion(Context context)
     {
@@ -31,8 +39,9 @@ public class SpeechEmotion {
         }
         try{
             vokaturiApi.startListeningForSpeech();
-        }catch (VokaturiException e){
+        }catch (VokaturiException | java.lang.IllegalStateException e){
             e.printStackTrace();
+            Toast.makeText(appContext, "Already recording", Toast.LENGTH_SHORT).show();
             Log.w("EROARE_VOKATURI_API" , "EROARE VOKATURI LISTENING");
         }
     }
@@ -41,8 +50,12 @@ public class SpeechEmotion {
     {
         try{
             emotionProbabilities = vokaturiApi.stopListeningAndAnalyze();
+            file = vokaturiApi.getRecordedAudio();
         }catch (VokaturiException e){
             Log.w("EROARE_VOKATURI_API" , "EROARE VOKATURI STOPPING AND GETTING PROBABILITIES");
+            Toast.makeText(RecordActivity.context, "Try to speak louder, audio quality was too bad", Toast.LENGTH_LONG).show();
+        }catch( java.lang.IllegalStateException e){
+            Toast.makeText(RecordActivity.context, "The audio was already analysed!", Toast.LENGTH_LONG).show();
         }
         try{
             emotionProbabilities.scaledValues(3);
@@ -108,5 +121,52 @@ public class SpeechEmotion {
             }
         }
         return top3;
+    }
+
+    public void saveAudioFile(String file_counter) throws FileNotFoundException {
+
+        File f = new File(Environment.getExternalStorageDirectory() + "/EmotionTracker_Audios");
+        File audioDirectory = new File(Environment.getExternalStorageDirectory()+"/EmotionTracker_Audios");
+        if(f.isDirectory()) {
+            File outputFile = new File(audioDirectory, "vokaturi_recording_"+file_counter+".mp3");
+            Log.w("File CREATED:", "ADDED");
+            Log.w("File CREATED:", "ADDED");
+            Log.w("File CREATED:", "ADDED");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+            FileInputStream inputStream;
+            try {
+                inputStream = new FileInputStream(file);
+                int bufferSize;
+                byte[] buffer = new byte[512];
+                while ((bufferSize = inputStream.read(buffer)) > 0) {
+                    fos.write(buffer, 0, bufferSize);
+                }
+                inputStream.close();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            audioDirectory.mkdirs();
+            File outputFile = new File(audioDirectory, "vokaturi_recording_"+file_counter+".mp3");
+            Log.w("File CREATED:", "ADDED");
+            Log.w("File CREATED:", "ADDED");
+            Log.w("File CREATED:", "ADDED");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+            FileInputStream inputStream;
+            try {
+                inputStream = new FileInputStream(file);
+                int bufferSize;
+                byte[] buffer = new byte[512];
+                while ((bufferSize = inputStream.read(buffer)) > 0) {
+                    fos.write(buffer, 0, bufferSize);
+                }
+                inputStream.close();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

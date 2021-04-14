@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FrontCamera">
+    tools:context=".TextActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -13,19 +13,13 @@
         >
 
     </androidx.appcompat.widget.Toolbar>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/camera_preview"
-        />
 
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/camera_preview"
-        android:id="@+id/capture"
-        android:text="Take Photo"
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/history_toolbar"
+        android:dividerHeight="10.0sp"
         />
-
 
 </RelativeLayout>
