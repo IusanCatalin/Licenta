@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape android:shape="rectangle">
+            <corners
+                android:bottomRightRadius="5dp"
+                android:bottomLeftRadius="5dp"
+                android:topLeftRadius="5dp"
+                android:topRightRadius="5dp"/>
+            <stroke android:width="3dp" android:color="#f0000000" />
+            <gradient android:startColor="#ffab91"
+                android:endColor="#ffccbc"
+                android:angle="135" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_action_name" />
+</layer-list>

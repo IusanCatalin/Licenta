@@ -60,9 +60,7 @@ public class AudioMemories extends AppCompatActivity {
         {
             case android.R.id.home : {
                 onBackPressed();
-                mp.pause();
-                mp.stop();
-                mp.release();
+                stopAudio();
             }
         }
         return super.onOptionsItemSelected(item);
@@ -80,7 +78,7 @@ public class AudioMemories extends AppCompatActivity {
         }
     }
 
-    public void playAudio(String fileName){
+    private void playAudio(String fileName){
         Log.w("File name to open:", fileName);
         String path = Environment.getExternalStorageDirectory().toString()+"/EmotionTracker_Audios";
         //String file_name_test = "file_example_MP3_1MG.mp3"; //used for emulator
@@ -91,11 +89,28 @@ public class AudioMemories extends AppCompatActivity {
                 mp.stop();
                 mp.reset();
             }
+            else{
+                mp.pause();
+                mp.stop();
+                mp.reset();
+                mp = null;
+            }
+            if(mp == null){
+                mp = new MediaPlayer();
+            }
             mp.setDataSource(path + File.separator + fileName);
+            mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mp.prepare();
             mp.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void stopAudio(){
+        mp.pause();
+        mp.stop();
+        mp.reset();
+        mp = null;
     }
 }

@@ -8,4 +8,6 @@
         <item>This month</item>
         <item>This year</item>
     </string-array>
+    <string name="openDrawer">Open Drawer </string>
+    <string name="closeDrawer">Close Drawer </string>
 </resources>

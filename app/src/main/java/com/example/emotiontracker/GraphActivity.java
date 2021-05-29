@@ -33,7 +33,7 @@ public class GraphActivity extends AppCompatActivity {
             array_data.add(new BarEntry(Float.parseFloat(i.mDate),(int) i.mHappy_score));
         }
         BarDataSet barDataSet = new BarDataSet(array_data, "Happiness");
-        barDataSet.setColors(getResources().getColor(R.color.colorPrimaryDark));
+        barDataSet.setColors(getResources().getColor(R.color.dark_orange));
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(9f);
         barDataSet.setValueFormatter(new MyValueFormatter());

@@ -31,15 +31,16 @@ public class TextActivity extends AppCompatActivity {
     protected androidx.appcompat.widget.Toolbar toolbar;
     private String text;
     private EditText editText;
+    public static Context context;
     public static double score_emotion_text;
-    public static int use_text= 0;
+    public static boolean user_used_text = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_activity);
         editText = findViewById(R.id.edit_text);
-
+        context = this;
         setupUIViews();
         initToolbar();
     }
@@ -58,11 +59,16 @@ public class TextActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             score_emotion_text = textEmotion.getEmotionScore();
+                            user_used_text = true;
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(TextActivity.context, "Successfully added text", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     },
                     2000 // 1k = 1 sec, delay for getting the response from server
             );
-            use_text = 1;
 
             new java.util.Timer().schedule(
                     new java.util.TimerTask() {

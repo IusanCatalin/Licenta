@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TextActivity">
+    tools:context=".TextActivity"
+    android:background="@drawable/normal_orange_gradient3">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -15,28 +16,39 @@
     </androidx.appcompat.widget.Toolbar>
     <Button
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="80dp"
         android:text="Finished"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/analyse_button"
         android:onClick="analyse_text"
-
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_below="@+id/edit_text"
+        android:background="@drawable/button_border_round"
         />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_below="@id/text"
         android:id="@+id/edit_text"
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/editbox_background"
+        android:padding="10dp"
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/text"
-        android:text="Write something about your day"
+        android:text="How are you feeling today?"
         android:textSize="25dp"
+        android:layout_below="@id/history_toolbar"
+        android:layout_marginHorizontal="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
         />
 
 </RelativeLayout>

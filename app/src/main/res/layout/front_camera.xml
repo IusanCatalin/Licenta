@@ -9,22 +9,26 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/history_toolbar"
+        android:id="@+id/toolbar_front_camera"
+        android:background="@color/dark_orange"
         >
 
     </androidx.appcompat.widget.Toolbar>
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:id="@+id/camera_preview"
         />
 
     <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/camera_preview"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
         android:id="@+id/capture"
-        android:text="Take Photo"
+        android:textSize="23dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/border_button_nobackground"
+        android:layout_alignParentBottom="true"
+
         />
 
 

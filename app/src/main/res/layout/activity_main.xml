@@ -1,106 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:openDrawer="start"
     tools:context=".MainActivity">
 
-    <TextView
+
+
+    <RelativeLayout
+
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/welcome_text"
-        android:text="Welcome  , please use a analyse method"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:background="@drawable/normal_orange_gradient">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/welcome_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="75dp"
+            android:text="Welcome  , please use at least one analyse method"
+            android:textSize="20dp"
+            android:layout_marginHorizontal="20dp"
+            />
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="400dp"
+            android:layout_marginVertical="650dp"
+            android:id="@+id/imageView"/>
+
+        <Button
+            android:id="@+id/take_photo"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/welcome_text"
+            android:text="Take photo"
+            android:onClick="onClickTakePicture"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:outlineAmbientShadowColor="@color/pure_black"
+            android:outlineProvider="paddedBounds"
+            android:background="@drawable/button_border_round"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/welcome_text"
+            android:text="Speak"
+            android:onClick="recordSpeechActivity"
+            android:id="@+id/record"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/button_border_round"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:id="@+id/btnText"
+            android:text="Write text"
+            android:layout_below="@+id/welcome_text"
+            android:onClick="writeTextActivity"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/button_border_round"
+            />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/result_score_general"
+            android:text=""
+            android:layout_below="@+id/calculate_happiness"
+            android:textSize="40dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_centerHorizontal="true"
+
+            />
+
+        <Button
+            android:id="@+id/calculate_happiness"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/take_photo"
+            android:text="Calculate Happiness"
+            android:onClick="calculate_happiness"
+            android:layout_marginTop="50dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_border_round"
+            />
+    </RelativeLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@layout/activity_main_drawer"
+        android:background="@color/light_orange"
         />
-
-    <ImageView
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="400dp"
-        android:layout_marginVertical="650dp"
-        android:id="@+id/imageView"/>
-
-
-    <Button
-        android:id="@+id/take_photo"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/welcome_text"
-        android:text="Take photo"
-        android:onClick="onClickTakePicture"
-        />
-
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/welcome_text"
-        android:layout_toRightOf="@id/take_photo"
-        android:text="Speak"
-        android:onClick="recordSpeechActivity"
-        android:id="@+id/record"
-        />
-
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:id="@+id/btnText"
-        android:text="Write text"
-        android:layout_below="@+id/welcome_text"
-        android:onClick="writeTextActivity"
-        android:layout_toRightOf="@id/record"
-        />
-
-
-
-    <TextView
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:id="@+id/result_score_general"
-    android:text="Rezultat scor general fericire"
-    android:layout_below="@+id/calculate_happiness"
-
-    />
-
-    <Button
-        android:id="@+id/calculate_happiness"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/take_photo"
-        android:text="Calculate Happiness"
-        android:onClick="calculate_happiness"
-        />
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@+id/btnText"
-        android:layout_below="@+id/welcome_text"
-        android:text="H"
-        android:onClick="historyActivity"
-        />
-    <Button
-        android:id="@+id/btnHistory"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@+id/btnText"
-        android:layout_below="@+id/welcome_text"
-        android:text="H"
-        android:onClick="historyActivity"
-        />
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@+id/btnHistory"
-        android:layout_below="@+id/welcome_text"
-        android:text="M"
-        android:onClick="memoriesActivity"
-        />
-
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/take_photo"
-        android:layout_toRightOf="@id/calculate_happiness"
-        android:id="@+id/test_sad"
-        android:onClick="show_happy_memory"
-        />
-</RelativeLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>

@@ -66,18 +66,18 @@ public class HistoryActivity extends AppCompatActivity implements AdapterView.On
         mOnDateSetListener1 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth-1];
+                String date = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth];
                 date1.setText(date);
-                String dateToCompare = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth-1];
+                String dateToCompare = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth-1]; //bug? or between not working? solved by -1
                 mStringDate.setData1(dateToCompare);
             }
         };
         mOnDateSetListener2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth-1];
+                String date = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth];
                 date2.setText(date);
-                String dateToCompare = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth-1];
+                String dateToCompare = year + "/" + Database.monthNames[month] + "/" + Database.days[dayOfMonth];
                 mStringDate.setData2(dateToCompare);
             }
         };
@@ -314,7 +314,12 @@ public class HistoryActivity extends AppCompatActivity implements AdapterView.On
                 graphItemList.add(mGraphItemList.get(i));
             }
         }
-        graphItemList.add(mGraphItemList.get(0));
+        try{
+            graphItemList.add(mGraphItemList.get(0));
+        }catch (IndexOutOfBoundsException e){
+            Toast.makeText(this, "No data found", Toast.LENGTH_LONG);
+        }
+
     }
 
     private void extract_date_month(){

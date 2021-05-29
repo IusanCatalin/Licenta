@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,11 +30,11 @@ public class FrontCamera extends AppCompatActivity {
     protected androidx.appcompat.widget.Toolbar toolbar;
     private Camera mCamera = null;
     private CameraPreview mPreview;
-    Button captureButton;
+    private Button captureButton;
     public static final int MEDIA_TYPE_IMAGE = 1;
-    static Context con;
-    Bitmap bitmap;
-    Bitmap mainbitmap;
+    protected Bitmap bitmap;
+    private Bitmap mainbitmap;
+    public static Context con;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -54,7 +55,16 @@ public class FrontCamera extends AppCompatActivity {
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCamera.takePicture(null, null, mPicture);
+                try {
+                    mCamera.takePicture(null, null, mPicture);
+                }catch(java.lang.RuntimeException e){
+                    Log.w("error", "camera error");
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(MainActivity.context, "Camera error, restart application", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
         setupUIViews();
@@ -198,7 +208,7 @@ public class FrontCamera extends AppCompatActivity {
 
     public void setupUIViews()
     {
-        toolbar = findViewById(R.id.history_toolbar);
+        toolbar = findViewById(R.id.toolbar_front_camera);
     }
 
     private void initToolbar(){

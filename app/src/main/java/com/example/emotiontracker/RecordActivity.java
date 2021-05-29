@@ -2,6 +2,7 @@ package com.example.emotiontracker;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,14 +21,16 @@ public class RecordActivity extends AppCompatActivity {
     private SpeechEmotion speechEmotion;
     private String[] topEmotionsSpeech;
     private String audio_counter;
+    private Button record_btn;
     public static double speech_happinessScore=0.0;
-    public static int use_recording = 0;
     public static Context context;
+    public static Boolean user_recorded_audio=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_activity);
+        record_btn = findViewById(R.id.record_button);
         context = RecordActivity.this;
         setupUIViews();
         initToolbar();
@@ -37,7 +40,7 @@ public class RecordActivity extends AppCompatActivity {
     public void startRecording(View view)
     {
         speechEmotion = new SpeechEmotion(context);
-        use_recording = 1;
+        record_btn.getBackground().setColorFilter(0xff888888, PorterDuff.Mode.MULTIPLY);
     }
 
     public void stopRecording(View view) throws FileNotFoundException {
@@ -63,18 +66,22 @@ public class RecordActivity extends AppCompatActivity {
             Toast toast =Toast.makeText(this, "Please record something first", Toast.LENGTH_SHORT);
             toast.show();
         }
-        if(speech_happinessScore > 0.1) //change here with 0.75, for easier testing we will add all files for the moment
+        if(speech_happinessScore > 0.75) //change here with 0.75, for easier testing we will add all files for the moment
         {
             setPreferences();
             Log.w("AUDIO_COUNTER",audio_counter);
             speechEmotion.saveAudioFile(audio_counter);
         }
+        record_btn.getBackground().clearColorFilter();
     }
 
     private void set_speech_happinessScore(String[] topEmotions){
-        if(topEmotions[0].equals("No results found, audio unclear or low quality"))
-            speech_happinessScore=0;
+        if(topEmotions[0].equals("No results found, audio unclear or low quality")) {
+            speech_happinessScore = 0;
+        }
         else {
+            Toast.makeText(this, "Successfully added audio", Toast.LENGTH_LONG).show();
+            user_recorded_audio = true;
             for (int i = 0; i < 3; i++) {
                 if (i == 0) {
                     if (topEmotions[i] == "anger")

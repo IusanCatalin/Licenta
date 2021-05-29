@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistoryActivity">
+    tools:context=".HistoryActivity"
+    android:background="@drawable/normal_orange_gradient5">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/history_toolbar"
+
         >
 
     </androidx.appcompat.widget.Toolbar>
@@ -19,7 +21,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/listViewAudio"
         android:layout_below="@+id/history_toolbar"
-        android:dividerHeight="19.0sp"
+        android:dividerHeight="10sp"
+        android:background="@drawable/list_view_transparent_round"
+        android:layout_marginHorizontal="20dp"
+        android:divider="@color/dark_orange"
+        android:padding="10dp"
         />
 
 </RelativeLayout>

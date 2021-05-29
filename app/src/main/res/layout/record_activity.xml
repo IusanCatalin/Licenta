@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecordActivity">
+    tools:context=".RecordActivity"
+    android:background="@drawable/normal_orange_gradient2">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -15,33 +16,39 @@
 
     </androidx.appcompat.widget.Toolbar>
     <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Record"
+        android:layout_width="150dp"
+        android:layout_height="80dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/record_button"
         android:onClick="startRecording"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/play_button"
+        android:layout_below="@+id/text_introduction"
         />
     <TextView
-        android:layout_width="400dp"
-        android:layout_height="50dp"
-        android:text="Hello, how is your day going?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="How is your day going?"
         android:textSize="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/record_button"
+        android:layout_marginHorizontal="3dp"
+        android:layout_below="@+id/history_toolbar"
+        android:id="@+id/text_introduction"
+        android:layout_marginTop="75dp"
         />
 
     <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_height="80dp"
         android:text="Stop"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/record_button"
         android:onClick="stopRecording"
         android:id="@+id/stop_button"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/stop_button"
         />
-
 
 </RelativeLayout>

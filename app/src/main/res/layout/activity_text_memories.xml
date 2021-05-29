@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TextActivity">
+    tools:context=".TextActivity"
+    android:background="@drawable/normal_orange_gradient4">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -20,6 +21,10 @@
         android:id="@+id/listView"
         android:layout_below="@+id/history_toolbar"
         android:dividerHeight="10.0sp"
+        android:divider="@color/dark_orange"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/editbox_background"
+        android:padding="10dp"
         />
 
 </RelativeLayout>

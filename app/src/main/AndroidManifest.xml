@@ -29,7 +29,6 @@
         <activity android:name=".ImageMemories"></activity>
         <activity android:name=".AudioMemories" />
         <activity android:name=".TextMemories" />
-        <activity android:name=".MemoriesActivity" />
         <activity android:name=".GraphActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
