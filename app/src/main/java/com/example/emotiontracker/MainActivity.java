@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
@@ -58,10 +59,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
+
+import calendar.Events_ranking;
 import cz.msebera.android.httpclient.conn.HttpInetSocketAddress;
 
 
-
+import static android.Manifest.permission.READ_CALENDAR;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final static int REQUEST_WRITE_EXTERNAL_STORAGE = 600;
     private final static int REQUEST_INTERNET = 700;
     private final static int RECORD_AUDIO = 800;
+    private final static int READ_CALENDAR = 900;
+    private final static int WRITE_CALENDAR = 901;
     private MediaPlayer mp = new MediaPlayer();
     private ActionBarDrawerToggle toggle;
     public static String[] happy_texts;
@@ -289,6 +294,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO);
+        }
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CALENDAR}, READ_CALENDAR);
+        }
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_CALENDAR}, RECORD_AUDIO);
         }
     }
 
@@ -591,6 +602,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             audio_memories();
         else if (menuItem.getItemId() == R.id.item_four)
             image_memories();
+        else if (menuItem.getItemId() == R.id.add_event)
+            add_new_event();
+        else if (menuItem.getItemId() == R.id.events_rank)
+            ranking_events();
         else{
                 //to do
         }
@@ -707,6 +722,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(TextActivity.user_used_text){
             write_text.getBackground().setColorFilter(0xff888888, PorterDuff.Mode.MULTIPLY);
         }
+    }
+
+    private void add_new_event(){
+        Intent intent_add_event = new Intent(Intent.ACTION_INSERT);
+        intent_add_event.setData(CalendarContract.Events.CONTENT_URI);
+        if(intent_add_event.resolveActivity(getPackageManager()) != null)
+            startActivity(intent_add_event);
+        else{
+            Toast.makeText(context, "Google Calendar app not found" , Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    public void ranking_events() {
+        Intent ranking_intent = new Intent (MainActivity.this, Events_ranking.class);
+        MainActivity.this.startActivity(ranking_intent);
     }
 }
 

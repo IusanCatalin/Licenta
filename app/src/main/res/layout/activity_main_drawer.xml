@@ -18,4 +18,15 @@
                 android:title="  Image memories" />
         </menu>
     </item>
+
+    <item android:title="Calendar">
+        <menu>
+            <item android:id="@+id/add_event"
+                android:title="  Add new event" />
+            <item android:id="@+id/today_events"
+                android:title="  Today's events" />
+            <item android:id="@+id/events_rank"
+                android:title="  Event's ranking" />
+        </menu>
+    </item>
 </menu>
