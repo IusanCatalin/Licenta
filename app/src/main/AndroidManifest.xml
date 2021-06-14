@@ -28,7 +28,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="calendar.Events_ranking"></activity>
         <activity android:name=".ImageMemories" />
         <activity android:name=".AudioMemories" />
         <activity android:name=".TextMemories" />
@@ -44,6 +43,7 @@
         <activity android:name=".RecordActivity" />
         <activity android:name=".TextActivity" />
         <activity android:name=".HistoryActivity" />
+        <activity android:name=".Events_ranking"/>
 
         <uses-library
             android:name="org.apache.http.legacy"

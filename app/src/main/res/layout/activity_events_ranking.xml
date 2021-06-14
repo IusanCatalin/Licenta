@@ -16,14 +16,17 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/test"
-        android:layout_below="@id/history_toolbar"
-        android:layout_centerHorizontal="true"
-        android:textSize="20dp"
-        android:text="Wow"
-        />
+        android:layout_height="400dp"
+        android:id="@+id/events_list"
+        android:layout_below="@+id/history_toolbar"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/editbox_background"
+        android:padding="10dp"
+        android:divider="@color/dark_orange"
+        android:dividerHeight="1dp"
+        >
+    </ListView>
 
 </RelativeLayout>

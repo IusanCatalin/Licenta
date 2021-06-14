@@ -75,25 +75,33 @@ public class TextActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Log.w("Score text initial", String.valueOf(score_emotion_text));
-                            if(score_emotion_text> 0.75)
+                            if(score_emotion_text> 0.1) //de schimbat la .75
+                                Log.w("trying to write", "to text memories");
                                 writeToFile(text, TextActivity.this);
                         }
                     },
-                    2000 // 1k = 1 sec, delay for getting the response from server
+                    3000 // 1k = 1 sec, delay for getting the response from server
             );
         }
     }
 
     private void writeToFile(String data,Context context) {
+        OutputStreamWriter outputStreamWriter = null;
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("happy_texts.txt", MODE_APPEND));
+            outputStreamWriter = new OutputStreamWriter(context.openFileOutput("happy_texts.txt", MODE_APPEND));
             outputStreamWriter.write(data+'\n');
-            outputStreamWriter.close();
+            Log.w("wrote", "in happy_texts");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
             outputStreamWriter.flush();
             outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+        }catch ( java.io.IOException close_exc){
+            close_exc.printStackTrace();
+            Log.w("error closing", "happy_texts file");
         }
     }
 

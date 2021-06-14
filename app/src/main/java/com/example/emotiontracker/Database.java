@@ -20,6 +20,13 @@ public class Database extends SQLiteOpenHelper {
     private static final String CREATION_DATE = "creationdate"; //Date format is mm/dd/yyyy
     private static final String CREATE_TABLE_RESULTS_SUMMARY = "CREATE TABLE " + TABLE_RESULT_SUMMARY + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + CREATION_DATE + " TEXT," + HAPPY_SCORE + " INTEGER" + ")";
     private static final String DELETE_TABLE_ON_UPGRADE = "DROP TABLE IF EXISTS " + TABLE_RESULT_SUMMARY;
+    //events table
+    private static final String TABLE_EVENTS = "Events";
+    private static final String EVENT_TITLE = "event_title";
+    private static final String EVENT_SCORE = "event_score";
+    private static final String EVENT_TIMES = "event_times";
+    private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENTS + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + EVENT_TITLE + " TEXT UNIQUE," + EVENT_SCORE + " INTEGER," + EVENT_TIMES + " INTEGER" + ")";
+    private static final String DELETE_TABLE_ON_UPGRADE2 = "DROP TABLE IF EXISTS " + TABLE_EVENTS;
     public static String[] monthNames = new String[12];
     public static String[] days = new String[32];
     public static String[] hours = new String[26];
@@ -32,11 +39,13 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_RESULTS_SUMMARY);
+        db.execSQL(CREATE_TABLE_EVENTS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DELETE_TABLE_ON_UPGRADE);
+        db.execSQL(DELETE_TABLE_ON_UPGRADE2);
         onCreate(db);
     }
 
@@ -53,15 +62,14 @@ public class Database extends SQLiteOpenHelper {
         String hour = hours[mCalendar.get(Calendar.HOUR_OF_DAY)];
         String month = monthNames[mCalendar.get(Calendar.MONTH)];
         String day = days[mCalendar.get(Calendar.DAY_OF_MONTH)];
-        String todayDate = String.valueOf(mCalendar.get(Calendar.YEAR)  + "/" + String.valueOf(month) + "/" + String.valueOf(day)  + " Time " + String.valueOf(hour) +":" + String.valueOf(minute));
+        String todayDate = String.valueOf(mCalendar.get(Calendar.YEAR) + "/" + String.valueOf(month) + "/" + String.valueOf(day) + " Time " + String.valueOf(hour) + ":" + String.valueOf(minute));
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(CREATION_DATE, todayDate);
             values.put(HAPPY_SCORE, currentDateHappyScore);
             long row = db.insert(TABLE_RESULT_SUMMARY, null, values);
-            if(row!=-1)
-            {
+            if (row != -1) {
                 createSuccessful = true;
             }
             db.close();
@@ -71,8 +79,7 @@ public class Database extends SQLiteOpenHelper {
         return createSuccessful;
     }
 
-    protected ArrayList<DatabaseItemModel> readEntries()
-    {
+    protected ArrayList<DatabaseItemModel> readEntries() {
         setMinutes();
         setHours();
         setDays();
@@ -98,17 +105,17 @@ public class Database extends SQLiteOpenHelper {
         return ItemsList;
     }
 
-    protected ArrayList<DatabaseItemModel> readTodayEntries()
-    {
+    protected ArrayList<DatabaseItemModel> readTodayEntries() {
         setMonths();
         setDays();
         Calendar mCalendar = Calendar.getInstance();
-        String month= monthNames[mCalendar.get(Calendar.MONTH)];;
+        String month = monthNames[mCalendar.get(Calendar.MONTH)];
+        ;
         String day = days[mCalendar.get(Calendar.DAY_OF_MONTH)];
         String year = String.valueOf(mCalendar.get(Calendar.YEAR));
 
         ArrayList<DatabaseItemModel> ItemsList = new ArrayList<DatabaseItemModel>();
-        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " LIKE " +"'" + year +"/"+month+"/"+day+ "%" + "'";
+        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " LIKE " + "'" + year + "/" + month + "/" + day + "%" + "'";
         try {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor c = db.rawQuery(selectQuery, null);
@@ -129,17 +136,16 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
-    protected ArrayList<DatabaseItemModel> readMonthEntries()
-    {
+    protected ArrayList<DatabaseItemModel> readMonthEntries() {
         setMonths();
         setDays();
         Calendar mCalendar = Calendar.getInstance();
         String day = days[mCalendar.get(Calendar.DAY_OF_MONTH)];
-        String month= monthNames[mCalendar.get(Calendar.MONTH)];
+        String month = monthNames[mCalendar.get(Calendar.MONTH)];
         String year = String.valueOf(mCalendar.get(Calendar.YEAR));
 
         ArrayList<DatabaseItemModel> ItemsList = new ArrayList<DatabaseItemModel>();
-        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " LIKE " +"'" + "%"+year+"/"+month+ "%" + "'";
+        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " LIKE " + "'" + "%" + year + "/" + month + "%" + "'";
         try {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor c = db.rawQuery(selectQuery, null);
@@ -159,17 +165,17 @@ public class Database extends SQLiteOpenHelper {
         return ItemsList;
     }
 
-    protected ArrayList<DatabaseItemModel> readYearEntries()
-    {
+    protected ArrayList<DatabaseItemModel> readYearEntries() {
         setMonths();
         setDays();
         Calendar mCalendar = Calendar.getInstance();
         String day = days[mCalendar.get(Calendar.DAY_OF_MONTH)];
-        String month= monthNames[mCalendar.get(Calendar.MONTH)];;
+        String month = monthNames[mCalendar.get(Calendar.MONTH)];
+        ;
         String year = String.valueOf(mCalendar.get(Calendar.YEAR));
 
         ArrayList<DatabaseItemModel> ItemsList = new ArrayList<DatabaseItemModel>();
-        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " LIKE " +"'" + "%" +year+ "%" + "'";
+        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " LIKE " + "'" + "%" + year + "%" + "'";
         try {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor c = db.rawQuery(selectQuery, null);
@@ -189,20 +195,20 @@ public class Database extends SQLiteOpenHelper {
         return ItemsList;
     }
 
-    protected ArrayList<DatabaseItemModel> readCustomEntries()
-    {
+    protected ArrayList<DatabaseItemModel> readCustomEntries() {
         String first_date = HistoryActivity.mStringDate.data1;
         String second_date = HistoryActivity.mStringDate.data2;
-        Log.w("Date1",first_date);
-        Log.w("Date2",second_date);
+        Log.w("Date1", first_date);
+        Log.w("Date2", second_date);
         setMonths();
         setDays();
         Calendar mCalendar = Calendar.getInstance();
         String day = days[mCalendar.get(Calendar.DAY_OF_MONTH)];
-        String month= monthNames[mCalendar.get(Calendar.MONTH)];;
+        String month = monthNames[mCalendar.get(Calendar.MONTH)];
+        ;
         String year = String.valueOf(mCalendar.get(Calendar.YEAR));
         ArrayList<DatabaseItemModel> ItemsList = new ArrayList<DatabaseItemModel>();
-        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " BETWEEN " +"'" + first_date + "%" + "'" + " AND " + "'" + second_date + "%" + "'";
+        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " BETWEEN " + "'" + first_date + "%" + "'" + " AND " + "'" + second_date + "%" + "'";
         try {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor c = db.rawQuery(selectQuery, null);
@@ -222,8 +228,7 @@ public class Database extends SQLiteOpenHelper {
         return ItemsList;
     }
 
-    private void setMonths()
-    {
+    private void setMonths() {
         //calendar displays months from 0-11 so we fixed it
         monthNames[0] = "01";
         monthNames[1] = "02";
@@ -239,8 +244,7 @@ public class Database extends SQLiteOpenHelper {
         monthNames[11] = "12";
     }
 
-    private void setHours()
-    {
+    private void setHours() {
         //calendar displays hours < 10 as a single digit we want them as two, ex. 8 as 08
         hours[0] = "00";
         hours[1] = "01";
@@ -269,8 +273,7 @@ public class Database extends SQLiteOpenHelper {
         hours[24] = "24";
     }
 
-    private void setDays()
-    {
+    private void setDays() {
         //calendar displays days without the 0 for date > 10 ( ex. we want to show 09 not 9)
         days[0] = "00";
         days[1] = "01";
@@ -306,8 +309,7 @@ public class Database extends SQLiteOpenHelper {
         days[31] = "31";
     }
 
-    private void setMinutes()
-    {
+    private void setMinutes() {
         //calendar displays days without the 0 for minutes > 10 ( ex. we want to show 09 not 9)
         minutes[0] = "00";
         minutes[1] = "01";
@@ -371,5 +373,108 @@ public class Database extends SQLiteOpenHelper {
         minutes[59] = "59";
         minutes[60] = "60";
     }
-}
 
+    protected boolean createEntryEvents(String event_title, int happy_score) {
+
+        boolean createSuccessful = false;
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(EVENT_TITLE, event_title);
+            values.put(EVENT_SCORE, happy_score);
+            values.put(EVENT_TIMES, 1);
+            long row = db.insert(TABLE_EVENTS, null, values);
+            if (row != -1) {
+                createSuccessful = true;
+            }
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return createSuccessful;
+    }
+
+    protected ArrayList<DatabaseItemEvents> readEventEntries() {
+        ArrayList<DatabaseItemEvents> itemsList = new ArrayList<DatabaseItemEvents>();
+        String selectQuery = "SELECT * FROM " + TABLE_EVENTS;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery(selectQuery, null);
+            if (c.moveToFirst()) {
+                do {
+                    DatabaseItemEvents mDatabaseItemEvents = new DatabaseItemEvents();
+                    mDatabaseItemEvents.title = c.getString((c.getColumnIndex(EVENT_TITLE)));
+                    mDatabaseItemEvents.score = c.getInt((c.getColumnIndex(EVENT_SCORE)));
+                    mDatabaseItemEvents.times = c.getInt((c.getColumnIndex(EVENT_TIMES)));
+                    itemsList.add(mDatabaseItemEvents);
+                } while (c.moveToNext());
+            }
+            c.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return itemsList;
+    }
+
+    protected boolean edit_events(String event_title, int event_score, int event_times) {
+        boolean editSuccessful = false;
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(EVENT_SCORE, event_score);
+            values.put(EVENT_TIMES, event_times);
+            long row = db.update(TABLE_EVENTS, values , "event_title = ?" , new String[]{event_title});
+            if (row != -1) {
+                editSuccessful = true;
+            }
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return editSuccessful;
+    }
+
+    protected int getPreviousDayEmotionScore() {
+        int score_day = -1;
+        int contor = 1;
+        boolean first = true;
+        setMonths();
+        setDays();  //it was working without but only if the user used calculate happiness
+        Calendar mCalendar = Calendar.getInstance();
+        mCalendar.add(Calendar.DATE, -1);
+        String month = monthNames[mCalendar.get(Calendar.MONTH)];
+        String day = days[mCalendar.get(Calendar.DAY_OF_MONTH)];
+        String year = String.valueOf(mCalendar.get(Calendar.YEAR));
+        Log.w("database date", "day is" +day);
+        Log.w("database date", "month is" +month);
+        Log.w("database date", "year is" +year);
+        String selectQuery = "SELECT * FROM " + TABLE_RESULT_SUMMARY + " WHERE " + CREATION_DATE + " LIKE " + "'" + year + "/" + month + "/" + day + "%" + "'";
+        try {
+            Log.w("trying to read", "from database");
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery(selectQuery, null);
+            if (c.moveToFirst()) {
+                do {
+                    Log.w("inside cursor", "curosr");
+                    if(!first)
+                        contor = contor + 1;
+                    score_day = score_day + c.getInt((c.getColumnIndex(HAPPY_SCORE)));
+                    Log.w("previous day scores", String.valueOf(c.getInt((c.getColumnIndex(HAPPY_SCORE)))));
+                    first = false;
+                } while (c.moveToNext());
+            }
+            else{
+                Log.w("no previous day" ,"events");
+            }
+            score_day = (score_day+1) / contor;
+            c.close();
+            db.close();
+        } catch (java.lang.ArithmeticException e) {
+            e.printStackTrace();
+            Log.w("no previous day" ,"events");
+        }
+        Log.w("score of prev day" , String.valueOf(score_day));
+        return score_day;
+    }
+}

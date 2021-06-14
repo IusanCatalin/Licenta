@@ -71,11 +71,19 @@ public class AudioMemories extends AppCompatActivity {
         String path = Environment.getExternalStorageDirectory().toString()+"/EmotionTracker_Audios";
         File directory = new File(path);
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
-        for (int i = 0; i < files.length; i++)
-        {
-            audio_files.add(files[i].getName());
+        try {
+            Log.d("Files", "Size: " + files.length);
+        }catch (java.lang.NullPointerException e){
+            Log.w("audio files", "are 0");
         }
+        try {
+            for (int i = 0; i < files.length; i++) {
+                audio_files.add(files[i].getName());
+            }
+        }catch (java.lang.NullPointerException e){
+            Log.w("audio files", "are 0");
+        }
+
     }
 
     private void playAudio(String fileName){

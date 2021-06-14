@@ -76,10 +76,14 @@ public class ImageMemories extends AppCompatActivity {
         String path = Environment.getExternalStorageDirectory().toString()+"/EmotionTracker_Images";
         File directory = new File(path);
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
-        for (int i = 0; i < files.length; i++)
+        try {
+            Log.d("Files", "Size: " + files.length);
+            for (int i = 0; i < files.length; i++) {
+                image_files.add(files[i].getName());
+            }
+        }catch (java.lang.NullPointerException e)
         {
-            image_files.add(files[i].getName());
+            Log.w("No images" , "to display");
         }
     }
 

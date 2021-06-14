@@ -4,13 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,14 +21,11 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
-import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -60,11 +55,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
-import calendar.Events_ranking;
-import cz.msebera.android.httpclient.conn.HttpInetSocketAddress;
 
-
-import static android.Manifest.permission.READ_CALENDAR;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -120,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkUserName();
         mDatabase = new Database(context);
         happy_texts = readFromFile(this).split(System.getProperty("line.separator"));
+        for(int i = 0; i < happy_texts.length; i++){
+            Log.w("Line is:", happy_texts[i]);
+        }
         initToolbar();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -245,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
+                        Log.w("trying to save" , "img");
                         if (image_happinessScore > 0.1) //all images for the moment, testing, change 0.75 in real application
                         {
                             setPreferences();
@@ -253,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
 
                     }
-                }, 3000
+                }, 4000
         );
     }
 
@@ -372,8 +367,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     image_happinessScore = image_happinessScore + 0;
                 else if (topEmotions[i] == "fear")
                     image_happinessScore = image_happinessScore + 0;
-                else if (topEmotions[i] == "happiness")
+                else if (topEmotions[i] == "happiness") {
                     image_happinessScore = image_happinessScore + 1;
+                    break;
+                }
                 else if (topEmotions[i] == "neutral")
                     image_happinessScore = image_happinessScore + 0.5;
                 else if (topEmotions[i] == "sadness")
@@ -457,6 +454,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String readFromFile(Context context) {
         String text = "";
+        File texts = new File("/data/data/com.example.emotiontracker/files/happy_texts.txt");
         try {
             InputStream inputStream = context.openFileInput("happy_texts.txt");
             if (inputStream != null) {
@@ -464,8 +462,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
-                while ((receiveString = bufferedReader.readLine()) != null) {
-                    stringBuilder.append("\n").append(receiveString);
+                try {
+                    if (texts.length() != 0) {
+                        while ((receiveString = bufferedReader.readLine()) != null) {
+                            stringBuilder.append("\n").append(receiveString);
+                        }
+                    }
+                }catch (java.lang.NullPointerException file_exc){
+                    file_exc.printStackTrace();
+                    Log.w("text memories", "is empty");
                 }
                 inputStream.close();
                 text = stringBuilder.toString();
@@ -480,6 +485,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void saveImg(String file_counter) {
+        Log.w("Saving img" , "saving");
         File f = new File(Environment.getExternalStorageDirectory() + "/EmotionTracker_Images");
         if (f.isDirectory()) {
             File outputFile = new File(f, "vokaturi_image_" + file_counter + ".png");
