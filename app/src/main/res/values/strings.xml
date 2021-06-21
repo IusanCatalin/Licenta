@@ -2,6 +2,7 @@
     <string name="app_name">EmotionTracker</string>
     <string name="audio_file_counter">audio_file_counter</string>
     <string name="image_file_counter">image_file_counter</string>
+    <string name="date">date</string>
     <string-array name="select_array">
         <item>All</item>
         <item>Today</item>

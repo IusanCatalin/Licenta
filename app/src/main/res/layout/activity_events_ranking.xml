@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistoryActivity"
+    tools:context=".Events_ranking"
     android:background="@drawable/normal_orange_gradient5">
 
     <androidx.appcompat.widget.Toolbar
@@ -28,5 +28,30 @@
         android:dividerHeight="1dp"
         >
     </ListView>
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/events_list"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/button_border_round"
+        android:text="Sort by score"
+        android:id="@+id/sort_by_score"
+        android:layout_marginTop="20dp"
+        android:onClick="sort_byScore"
+        />
+    <Button
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/events_list"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_border_round"
+        android:text="Sort by times done"
+        android:layout_toRightOf="@id/sort_by_score"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:onClick="sort_byTimes"
+        />
 
 </RelativeLayout>

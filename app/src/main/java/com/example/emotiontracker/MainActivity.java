@@ -9,12 +9,15 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -22,6 +25,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -53,6 +57,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 
@@ -61,6 +67,8 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     protected androidx.appcompat.widget.Toolbar toolbar;
+    protected static ArrayList<String> events = new ArrayList<String>();
+    protected static ArrayList<DatabaseItemEvents> events_database = new ArrayList<DatabaseItemEvents>();
     private TextView welcome_text;
     private TextView general_score;
     private TextView popup_file_name_view;
@@ -76,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Double image_happinessScore = 0.0;
     private int memory_case;
     private boolean user_took_photo = false;
+    private boolean all_permissions = true;
     private Database mDatabase;
+    private Database database;
+    private Events_ranking events_ranking = new Events_ranking();
     private final static int CAMERA_PIC_REQUEST = 300;
     private final static int REQUEST_CAMERA_PERMISSION = 400;
     private final static int REQUEST_READ_EXTERNAL_STORAGE = 500;
@@ -85,10 +96,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final static int RECORD_AUDIO = 800;
     private final static int READ_CALENDAR = 900;
     private final static int WRITE_CALENDAR = 901;
+    private final static int ALL_PERMISSIONS = 1;
     private MediaPlayer mp = new MediaPlayer();
     private ActionBarDrawerToggle toggle;
     public static String[] happy_texts;
     public static Context context;
+    private String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.INTERNET,
+            READ_EXTERNAL_STORAGE,
+            Manifest.permission.INTERNET,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR
+    };
 
 
     //private static final int RESULT_LOAD_IMAGE = 100;   // variables for pick image from gallery test
@@ -107,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         record = findViewById(R.id.record);
         write_text = findViewById(R.id.btnText);
         context = this;
-        checkPermissions();
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, ALL_PERMISSIONS);
+        }
         checkUserName();
         mDatabase = new Database(context);
         happy_texts = readFromFile(this).split(System.getProperty("line.separator"));
@@ -117,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initToolbar();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        dailyEventsRankings();
     }
     /*
     function for testing a image from gallery
@@ -274,29 +299,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return -1; // No front-facing camera found
     }
 
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
         }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET);
-        }
-        if (ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
-        }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-        }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO);
-        }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CALENDAR}, READ_CALENDAR);
-        }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_CALENDAR}, RECORD_AUDIO);
-        }
+        return true;
     }
+
 
     public void recordSpeechActivity(View view) {
         Intent speechIntent = new Intent(MainActivity.this, RecordActivity.class);
@@ -327,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("user_name", user_name);
                 editor.apply();
+                welcome_text.setText("Welcome " + user_name + ", please use at least one of the analyse methods below!");
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -337,6 +351,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         builder.show();
+
+
     }
 
     private void checkUserName() {
@@ -613,9 +629,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (menuItem.getItemId() == R.id.events_rank)
             ranking_events();
         else{
-                //to do
+            view_day_activities();
         }
         return false;
+    }
+
+    private void view_day_activities() {
+        Calendar calendar = Calendar.getInstance();
+        long startMillis = calendar.getTimeInMillis();
+        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+        builder.appendPath("time");
+        ContentUris.appendId(builder, startMillis);
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+                .setData(builder.build());
+        startActivity(intent);
     }
 
     public class MyClickListener implements View.OnClickListener {
@@ -745,6 +772,131 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent ranking_intent = new Intent (MainActivity.this, Events_ranking.class);
         MainActivity.this.startActivity(ranking_intent);
     }
+
+    private void dailyEventsRankings(){
+        getDatabaseEvents(); // we still need it once to get the events list
+        //wierd bug at times number
+        Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH);
+        int year = cal.get(Calendar.YEAR);
+        String actual_date = day + "/" + month + "/" + year;
+        Context context = MainActivity.this;
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.date), Context.MODE_PRIVATE);
+        String defaultValue = "0";
+        String last_date = sharedPref.getString(getString(R.string.date), defaultValue);
+        Log.w("last date:", last_date);
+        Log.w("actual date", actual_date);
+        if(!actual_date.equals(last_date)){
+            Log.w("dates different", "updating event ranks");
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.date), actual_date);
+            editor.apply();
+            getEvents();
+            getDatabaseEvents();
+            addNewEvents();
+            getDatabaseEvents2(); // second time in case of new entries
+            checkForExistingEvents();
+        }
+    }
+
+    protected void getEvents() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        Log.w("Date -1", String.valueOf(day));
+        int month = cal.get(Calendar.MONTH);
+        int year = cal.get(Calendar.YEAR);
+        Calendar start = Calendar.getInstance();
+        start.set(year, month, day, 0, 0);
+        long startMillis = start.getTimeInMillis();
+        Log.w("Start time", String.valueOf(startMillis));
+        Log.w("daystart", String.valueOf(start.get(Calendar.DAY_OF_MONTH)));
+        Log.w("daystart", String.valueOf(start.get(Calendar.MONTH)));
+        Log.w("daystart", String.valueOf(start.get(Calendar.YEAR)));
+        Calendar end = Calendar.getInstance();
+        end.set(year, month, day, 23, 59);
+        long endMillis = end.getTimeInMillis();
+        Log.w("End time", String.valueOf(endMillis));
+        Log.w("dayend", String.valueOf(end.get(Calendar.DAY_OF_MONTH)));
+        Log.w("dayend", String.valueOf(end.get(Calendar.MONTH)));
+        Log.w("dayend", String.valueOf(end.get(Calendar.YEAR)));
+        Cursor cur = null;
+        ContentResolver cr = this.getContentResolver();
+        try {
+            Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
+            ContentUris.appendId(builder, startMillis);
+            ContentUris.appendId(builder, endMillis);
+
+            String[] INSTANCE_PROJECTION = new String[]{CalendarContract.Instances.EVENT_ID,
+                    CalendarContract.Instances.TITLE, CalendarContract.Instances.BEGIN, CalendarContract.Instances.END};
+
+            Uri uri = builder.build();
+            cur = cr.query(uri, INSTANCE_PROJECTION, null, null, null);
+
+            if (cur != null) {
+                while (cur.moveToNext()) {
+                    String title = cur.getString(cur.getColumnIndex(CalendarContract.Instances.TITLE));
+                    Log.w("eveniment", title);
+                    events.add(title);
+                }
+            }
+        } catch (SecurityException e) {
+            // no permission to read calendars
+        } finally {
+            if (cur != null)
+                cur.close();
+        }
+        try{
+            Log.w("Calendar events are:" , events.get(0));
+        }catch (java.lang.IndexOutOfBoundsException e){
+            Log.w("No new calendar events" , "No new events");
+        }
+
+    }
+
+    protected void getDatabaseEvents() {
+        database = new Database(this);
+        events_database = database.readEventEntries();
+        try {
+            Log.w("events database:", events_database.get(events_database.size() - 1).title);
+        }catch (java.lang.ArrayIndexOutOfBoundsException e){
+            Log.w("events database" , "has 0 events");
+        }
+    }
+
+    protected void getDatabaseEvents2() {
+        database = new Database(this);
+        events_database = database.readEventEntries();
+        try {
+            Log.w("2events database:", events_database.get(events_database.size() - 1).title);
+        }catch (java.lang.ArrayIndexOutOfBoundsException e){
+            Log.w("2events database" , "has 0 events");
+        }
+    }
+
+    protected void addNewEvents(){
+        int happy_score_prev_day = database.getPreviousDayEmotionScore();
+        if(happy_score_prev_day == 0)
+            happy_score_prev_day = 50; //we set it to 50 if the user didn't record his emotions in the previous day so it doesn't affect the activity score
+        for( String e : events)
+            database.createEntryEvents(e, happy_score_prev_day);
+    }
+
+    protected void checkForExistingEvents(){
+        int happy_score_prev_day = database.getPreviousDayEmotionScore();
+        if(happy_score_prev_day == 0)
+            happy_score_prev_day = 50; //we set it to 50 if the user didn't record his emotions in the previous day so it doesn't affect the activity score
+        for(String e : events)
+            for(DatabaseItemEvents ed : events_database){
+                if(e.equals(ed.title)){
+                    database.edit_events(ed.title, (ed.score + happy_score_prev_day) / 2, ed.times+1); // not updating ok at same activity more than 1 per day
+                }
+            }
+        getDatabaseEvents();
+    }
+
+
 }
 
 
