@@ -41,6 +41,8 @@ public class HistoryActivity extends AppCompatActivity implements AdapterView.On
     private TextView date2;
     private DatePickerDialog.OnDateSetListener mOnDateSetListener1;
     private DatePickerDialog.OnDateSetListener mOnDateSetListener2;
+    private Button button_graph;
+    private Button ok_button;
     public static CustomDate mStringDate = new CustomDate();
     public static ArrayList<DatabaseItemModel> graphItemList = new ArrayList<DatabaseItemModel>();
 
@@ -49,7 +51,8 @@ public class HistoryActivity extends AppCompatActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
+        ok_button = findViewById(R.id.btn_ok);
+        button_graph = findViewById(R.id.btn_graph);
         mListView = (ListView)findViewById(R.id.items_list);
         date1 =(TextView)findViewById(R.id.date1);
         date2 =(TextView)findViewById(R.id.date2);
@@ -217,11 +220,15 @@ public class HistoryActivity extends AppCompatActivity implements AdapterView.On
     }
 
     public void onClickOkDate(View view) {
+        ok_button.setAlpha(0f);
+        ok_button.animate().alpha(1f).setDuration(1500);
         getDataCustom();
         mListAdapter.notifyDataSetChanged();
     }
 
     public void start_graph_activity(View view) {
+        button_graph.setAlpha(0f);
+        button_graph.animate().alpha(1f).setDuration(1500);
         Intent intent = new Intent (this, GraphActivity.class);
         startActivity(intent);
     }

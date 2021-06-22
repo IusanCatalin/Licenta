@@ -52,6 +52,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:onClick="sort_byTimes"
+        android:id="@+id/sort_by_times"
         />
 
 </RelativeLayout>

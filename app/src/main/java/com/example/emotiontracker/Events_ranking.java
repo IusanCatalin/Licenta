@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,11 +39,15 @@ public class Events_ranking extends AppCompatActivity {
     private ListAdapter listAdapter;
     private Toolbar toolbar;
     private ArrayList<DatabaseItemEvents> events_database = new ArrayList<DatabaseItemEvents>();
+    private Button sort_score;
+    private Button sort_times;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_ranking);
+        sort_score = findViewById(R.id.sort_by_score);
+        sort_times = findViewById(R.id.sort_by_times);
         setupUIViews();
         initToolbar();
         events_database = MainActivity.events_database;
@@ -75,6 +80,8 @@ public class Events_ranking extends AppCompatActivity {
     }
 
     public void sort_byScore(View view) {
+        sort_score.setAlpha(0f);
+        sort_score.animate().alpha(1f).setDuration(1500);
         Collections.sort(events_database, new Comparator<DatabaseItemEvents>() {
             public int compare(DatabaseItemEvents c1, DatabaseItemEvents c2) {
                 if (c1.score> c2.score) return -1;
@@ -85,6 +92,8 @@ public class Events_ranking extends AppCompatActivity {
     }
 
     public void sort_byTimes(View view) {
+        sort_times.setAlpha(0f);
+        sort_times.animate().alpha(1f).setDuration(1500);
         Collections.sort(events_database, new Comparator<DatabaseItemEvents>() {
             public int compare(DatabaseItemEvents c1, DatabaseItemEvents c2) {
                 if (c1.times> c2.times) return -1;

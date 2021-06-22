@@ -95,6 +95,7 @@
         android:outlineAmbientShadowColor="@color/pure_black"
         android:outlineProvider="paddedBounds"
         android:background="@drawable/button_border_round"
+        android:id="@+id/btn_ok"
 
         />
     

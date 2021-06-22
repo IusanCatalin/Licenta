@@ -66,7 +66,7 @@ public class RecordActivity extends AppCompatActivity {
             Toast toast =Toast.makeText(this, "Please record something first", Toast.LENGTH_SHORT);
             toast.show();
         }
-        if(speech_happinessScore > 0.1) //change here with 0.75, for easier testing we will add all files for the moment
+        if(speech_happinessScore > 0.70) //change here with 0.70, for easier testing we will add all files for the moment
         {
             setPreferences();
             Log.w("AUDIO_COUNTER",audio_counter);

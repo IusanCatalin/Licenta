@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ public class TextActivity extends AppCompatActivity {
     protected androidx.appcompat.widget.Toolbar toolbar;
     private String text;
     private EditText editText;
+    private Button analyse_btn;
     public static Context context;
     public static double score_emotion_text;
     public static boolean user_used_text = false;
@@ -40,12 +42,15 @@ public class TextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_activity);
         editText = findViewById(R.id.edit_text);
+        analyse_btn = findViewById(R.id.analyse_button);
         context = this;
         setupUIViews();
         initToolbar();
     }
 
     public void analyse_text(View view) {
+        analyse_btn.setAlpha(0f);
+        analyse_btn.animate().alpha(1f).setDuration(1500);
         text = editText.getText().toString();
         if (text.matches("")) {
             Toast toast = Toast.makeText(this, "Please write something first", Toast.LENGTH_SHORT);
@@ -75,9 +80,10 @@ public class TextActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Log.w("Score text initial", String.valueOf(score_emotion_text));
-                            if(score_emotion_text> 0.1) //de schimbat la .75
+                            if(score_emotion_text > 0.70) { //de schimbat la .70
                                 Log.w("trying to write", "to text memories");
                                 writeToFile(text, TextActivity.this);
+                            }
                         }
                     },
                     3000 // 1k = 1 sec, delay for getting the response from server

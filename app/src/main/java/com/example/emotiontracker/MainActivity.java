@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void run() {
                         Log.w("trying to save" , "img");
-                        if (image_happinessScore > 0.1) //all images for the moment, testing, change 0.75 in real application
+                        if (image_happinessScore > 0.70) //all images for the moment, testing, change 0.70 in real application
                         {
                             setPreferences();
                             saveImg(image_counter);
@@ -278,6 +279,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void onClickTakePicture(View view) {
+        take_picture.setAlpha(0f);
+        take_picture.animate().alpha(1f).setDuration(1500);
         if (getFrontCameraId() == -1) {
             Log.w("CAMERA", "NO CAMERA FOUND");
             Log.w("CAMERA", "NO CAMERA FOUND");
@@ -312,11 +315,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void recordSpeechActivity(View view) {
+        record.setAlpha(0f);
+        record.animate().alpha(1f).setDuration(1500);
         Intent speechIntent = new Intent(MainActivity.this, RecordActivity.class);
         MainActivity.this.startActivity(speechIntent);
     }
 
     public void writeTextActivity(View view) {
+        write_text.setAlpha(0f);
+        write_text.animate().alpha(1f).setDuration(1500);
         Intent textIntent = new Intent(MainActivity.this, TextActivity.class);
         MainActivity.this.startActivity(textIntent);
     }
@@ -449,7 +456,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         general_happinessScore = general_happinessScore / d;
         general_happinessScore = general_happinessScore * 100;
         int final_value = general_happinessScore.intValue();
-        general_score.setText(String.valueOf(final_value));
+        //general_score.setText(String.valueOf(final_value));
+        ValueAnimator animator = ValueAnimator.ofInt(0, final_value);
+        animator.setDuration(3000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                general_score.setText(animation.getAnimatedValue().toString());
+            }
+        });
+        animator.start();
         mDatabase.createEntry(final_value);
         //reset values
         image_happinessScore = 0.0;
@@ -555,9 +570,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             }
         });
-        Log.w("Textul file:", select_random_memory());
         popup_file_name_view = popupWindow.getContentView().findViewById(R.id.view_file_name);
         popup_file_name_view.setText(select_random_memory());
+        if(popup_file_name_view.getText() == "no name")
+            popupWindow.dismiss();
         if (memory_case == 1 || memory_case == 2) {
             MyClickListener lstn = new MyClickListener();
             popup_file_name_view.setOnClickListener(lstn);
@@ -576,10 +592,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //text memories
                 memory_case = 0;
                 int array_size = happy_texts.length;
-                int random_text = rand.nextInt(array_size);
-                String selected_memory_text = happy_texts[random_text];
-                selected_file = selected_memory_text;
-                break;
+                if(array_size != 0) {
+                    int random_text = rand.nextInt(array_size);
+                    String selected_memory_text = happy_texts[random_text];
+                    selected_file = selected_memory_text;
+                    break;
+                }
             case 1:
                 //audio memories
                 memory_case = 1;
@@ -587,14 +605,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 path = Environment.getExternalStorageDirectory().toString() + "/EmotionTracker_Audios";
                 directory = new File(path);
                 files = directory.listFiles();
-                Log.d("Files", "Size: " + files.length);
-                for (int i = 0; i < files.length; i++) {
-                    audio_files.add(files[i].getName());
+                try {
+                    for (int i = 0; i < files.length; i++) {
+                        audio_files.add(files[i].getName());
+                    }
+                    int random_audio = rand.nextInt(audio_files.size());
+                    String selected_memory_audio = audio_files.get(random_audio);
+                    selected_file = selected_memory_audio;
+                    break;
+                } catch (java.lang.NullPointerException e) {
+                    e.printStackTrace();
+                    Log.w("no happy", "memories to show");
                 }
-                int random_audio = rand.nextInt(audio_files.size());
-                String selected_memory_audio = audio_files.get(random_audio);
-                selected_file = selected_memory_audio;
-                break;
             case 2:
                 //image memories
                 memory_case = 2;
@@ -602,14 +624,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 path = Environment.getExternalStorageDirectory().toString() + "/EmotionTracker_Images";
                 directory = new File(path);
                 files = directory.listFiles();
-                Log.d("Files", "Size: " + files.length);
-                for (int i = 0; i < files.length; i++) {
-                    image_files.add(files[i].getName());
+                try {
+                    for (int i = 0; i < files.length; i++) {
+                        image_files.add(files[i].getName());
+                    }
+                    int random_image = rand.nextInt(image_files.size());
+                    String selected_memory_image = image_files.get(random_image);
+                    selected_file = selected_memory_image;
+                    break;
+                }catch(java.lang.NullPointerException e){
+                    e.printStackTrace();
+                    Log.w("sad state", "nothing to show");
                 }
-                int random_image = rand.nextInt(image_files.size());
-                String selected_memory_image = image_files.get(random_image);
-                selected_file = selected_memory_image;
-                break;
         }
         return selected_file;
     }
