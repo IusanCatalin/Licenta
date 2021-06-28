@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button take_picture;
     private Button record;
     private Button write_text;
+    private Button calculate_happy;
     private String Username;
     private String image_counter;
     private String[] topEmotionsImage;
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         take_picture = findViewById(R.id.take_photo);
         record = findViewById(R.id.record);
         write_text = findViewById(R.id.btnText);
+        calculate_happy = findViewById(R.id.calculate_happiness);
         context = this;
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, ALL_PERMISSIONS);
@@ -240,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         try {
                             if (topEmotionsImage[0] == "No results found, image unclear or low quality") {
-                                Log.w("IMAGINE NECLARA", "IMAGINE NECLARA");
+                                Log.w("IMAGINE", "IMAGINE NECLARA");
                                 runOnUiThread(new Runnable() {
                                     public void run() {
                                         Toast.makeText(MainActivity.context, "Image unclear or low quality, try again!", Toast.LENGTH_LONG).show();
@@ -439,6 +441,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void calculate_happiness(View view) {
+        calculate_happy.setAlpha(0f);
+        calculate_happy.animate().alpha(1f).setDuration(1500);
         double d = 0.0;
         Log.w("HAPPINESS SCORE IMAGE", image_happinessScore.toString());
         Log.w("HAPPINESS SCORE SPEECH", Double.toString(RecordActivity.speech_happinessScore));
@@ -671,6 +675,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
+    public void show_help(View view) {
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.help_window, null);
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mp.isPlaying()) {
+                    mp.pause();
+                    mp.stop();
+                    mp.reset();
+                    Log.w("OPRIRE", "OPRIRE DIN TAP");
+                }
+                popupWindow.dismiss();
+                return true;
+            }
+        });
+    }
+
     public class MyClickListener implements View.OnClickListener {
         private MySecondClickListener mSecondListener = new MySecondClickListener();
 
@@ -820,9 +848,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             editor.apply();
             getEvents();
             getDatabaseEvents();
+            checkForExistingEvents();
             addNewEvents();
             getDatabaseEvents2(); // second time in case of new entries
-            checkForExistingEvents();
         }
     }
 
@@ -834,7 +862,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int month = cal.get(Calendar.MONTH);
         int year = cal.get(Calendar.YEAR);
         Calendar start = Calendar.getInstance();
-        start.set(year, month, day, 0, 0);
+        start.set(year, month, day, 0, 1);
         long startMillis = start.getTimeInMillis();
         Log.w("Start time", String.valueOf(startMillis));
         Log.w("daystart", String.valueOf(start.get(Calendar.DAY_OF_MONTH)));

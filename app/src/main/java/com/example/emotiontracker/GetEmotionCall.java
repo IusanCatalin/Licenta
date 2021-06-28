@@ -30,6 +30,7 @@ class GetEmotionCall extends AsyncTask<InputStream, String, Face[]> {
     private float sadness = 0;
     private float surprise = 0;
 
+    @SuppressWarnings("deprecation")
     protected Face[] doInBackground(InputStream... params)
     {
         String json_response="";

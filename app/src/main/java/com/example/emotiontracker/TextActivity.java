@@ -91,7 +91,8 @@ public class TextActivity extends AppCompatActivity {
         }
     }
 
-    private void writeToFile(String data,Context context) {
+    @SuppressWarnings({"TryWithIdenticalCatches", "ConstantConditions"})
+    private void writeToFile(String data, Context context) {
         OutputStreamWriter outputStreamWriter = null;
         try {
             outputStreamWriter = new OutputStreamWriter(context.openFileOutput("happy_texts.txt", MODE_APPEND));

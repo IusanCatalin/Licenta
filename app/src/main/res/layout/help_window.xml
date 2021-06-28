@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_border_round_dark">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        android:text="Welcome to EmotionTracker!"
+        android:id="@+id/text_remember"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_string"
+        android:layout_below="@+id/text_remember"
+        android:layout_marginHorizontal="10dp"
+        android:textSize="20dp"
+        android:layout_marginVertical="20dp"
+        android:id="@+id/help_text"
+        android:clickable="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        android:text="Thank you for using our app!"
+        android:layout_below="@+id/help_text"/>
+</RelativeLayout>

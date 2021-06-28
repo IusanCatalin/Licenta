@@ -123,14 +123,13 @@ public class SpeechEmotion {
         return top3;
     }
 
-    public void saveAudioFile(String file_counter) throws FileNotFoundException {
-
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void saveAudioFile(String file_counter) throws FileNotFoundException
+    {
         File f = new File(Environment.getExternalStorageDirectory() + "/EmotionTracker_Audios");
         File audioDirectory = new File(Environment.getExternalStorageDirectory()+"/EmotionTracker_Audios");
         if(f.isDirectory()) {
             File outputFile = new File(audioDirectory, "vokaturi_recording_"+file_counter+".mp3");
-            Log.w("File CREATED:", "ADDED");
-            Log.w("File CREATED:", "ADDED");
             Log.w("File CREATED:", "ADDED");
             FileOutputStream fos = new FileOutputStream(outputFile);
             FileInputStream inputStream;
@@ -150,8 +149,6 @@ public class SpeechEmotion {
         else{
             audioDirectory.mkdirs();
             File outputFile = new File(audioDirectory, "vokaturi_recording_"+file_counter+".mp3");
-            Log.w("File CREATED:", "ADDED");
-            Log.w("File CREATED:", "ADDED");
             Log.w("File CREATED:", "ADDED");
             FileOutputStream fos = new FileOutputStream(outputFile);
             FileInputStream inputStream;

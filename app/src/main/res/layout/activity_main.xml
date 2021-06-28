@@ -101,6 +101,15 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_border_round"
             />
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/help_asset"
+            android:onClick="show_help"
+            />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

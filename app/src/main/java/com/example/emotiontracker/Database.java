@@ -49,6 +49,7 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @SuppressWarnings({"TooBroadScope", "UnnecessaryLocalVariable", "WeakerAccess"})
     protected boolean createEntry(int happiness) {
 
         boolean createSuccessful = false;
@@ -374,6 +375,7 @@ public class Database extends SQLiteOpenHelper {
         minutes[60] = "60";
     }
 
+    @SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
     protected boolean createEntryEvents(String event_title, int happy_score) {
 
         boolean createSuccessful = false;

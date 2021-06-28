@@ -22,6 +22,7 @@ public class RecordActivity extends AppCompatActivity {
     private String[] topEmotionsSpeech;
     private String audio_counter;
     private Button record_btn;
+    private Button stop_btn;
     public static double speech_happinessScore=0.0;
     public static Context context;
     public static Boolean user_recorded_audio=false;
@@ -31,6 +32,7 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_activity);
         record_btn = findViewById(R.id.record_button);
+        stop_btn = findViewById(R.id.stop_button);
         context = RecordActivity.this;
         setupUIViews();
         initToolbar();
@@ -39,11 +41,15 @@ public class RecordActivity extends AppCompatActivity {
 
     public void startRecording(View view)
     {
+        record_btn.setAlpha(0f);
+        record_btn.animate().alpha(1f).setDuration(1500);
         speechEmotion = new SpeechEmotion(context);
         record_btn.getBackground().setColorFilter(0xff888888, PorterDuff.Mode.MULTIPLY);
     }
 
     public void stopRecording(View view) throws FileNotFoundException {
+        stop_btn.setAlpha(0f);
+        stop_btn.animate().alpha(1f).setDuration(1500);
         try {
             speechEmotion.stopListening();
             topEmotionsSpeech = speechEmotion.getTopEmotions();

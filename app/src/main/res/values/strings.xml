@@ -11,4 +11,5 @@
     </string-array>
     <string name="openDrawer">Open Drawer </string>
     <string name="closeDrawer">Close Drawer </string>
+    <string name="help_string">To use the emotion detection, please choose one of the 3 methods in the center of the main screen. \n \nAfter using at least 1 method press on the button below to calculate your happiness. \n\nClick on the upper left side corner to see more options like history, your happy moments and your calendar.</string>
 </resources>

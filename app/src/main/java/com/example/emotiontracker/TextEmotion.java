@@ -27,6 +27,7 @@ public class TextEmotion extends AsyncTask<String, String, String> {
 
     float score_value;
 
+    @SuppressWarnings({"deprecation", "UnnecessaryLocalVariable"})
     @Override
     protected String doInBackground(String... strings) {
         String text= strings[0];
